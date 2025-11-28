@@ -1,0 +1,11 @@
+{
+  "themes": [
+    {
+      "name": "friendly-captcha",
+      "types": [
+        "login"
+      ]
+    }
+  ]
+}
+
