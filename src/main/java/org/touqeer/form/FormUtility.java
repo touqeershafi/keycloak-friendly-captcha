@@ -16,5 +16,6 @@ public class FormUtility {
         formsProvider.setAttribute(FRIENDLY_CAPTCHA_ENABLED, "enabled");
         formsProvider.setAttribute(FRIENDLY_CAPTCHA_SITE_KEY, friendlyCaptchaConfig.getSiteKey());
         formsProvider.setAttribute(FRIENDLY_CAPTCHA_ENDPOINT, friendlyCaptchaConfig.getRegion());
+        formsProvider.addScript(friendlyCaptchaConfig.getScriptUrl());
     }
 }

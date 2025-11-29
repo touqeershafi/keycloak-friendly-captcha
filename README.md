@@ -18,6 +18,7 @@
   <a href="#compatibility">Compatibility</a> •
   <a href="#installation">Installation</a> •
   <a href="#configuration">Configuration</a> •
+  <a href="#changelog">Changelog</a> •
   <a href="#license">License</a>
 </p>
 
@@ -26,6 +27,8 @@
 ## Overview
 
 This extension integrates [Friendly Captcha](https://friendlycaptcha.com/) into Keycloak, providing a privacy-respecting, GDPR-compliant CAPTCHA solution for your authentication flows. Unlike traditional CAPTCHAs, Friendly Captcha uses proof-of-work puzzles that are solved automatically by the user's browser, eliminating the need for image recognition challenges.
+
+The extension supports both **login** and **reset password** flows, with configurable attempt thresholds for login and immediate protection for password resets. You can configure custom JavaScript CDN URLs for the Friendly Captcha SDK through the admin console, giving you flexibility in how the CAPTCHA script is loaded.
 
 ## Screenshots
 
@@ -56,6 +59,12 @@ The login form displaying the Friendly Captcha widget after the configured numbe
 
 ![Login Form with Captcha](docs/screenshots/friendly-captcha-login-form.png)
 
+### Reset Password Form with Friendly Captcha
+
+The password reset form displaying the Friendly Captcha widget:
+
+![Reset Password Form with Captcha](docs/screenshots/friendly-captcha-reset-password-form.png)
+
 ### Friendly Captcha Theme
 
 The included `friendly-captcha` theme with the CAPTCHA widget integrated:
@@ -71,16 +80,17 @@ The included `friendly-captcha` theme with the CAPTCHA widget integrated:
 | Feature                             | Description                                                         |
 | ----------------------------------- | ------------------------------------------------------------------- |
 | **Login Form Protection**           | Username and Password form with integrated Friendly Captcha widget  |
+| **Reset Password Protection**       | Password reset form with integrated Friendly Captcha widget         |
 | **Configurable Attempts Threshold** | Show CAPTCHA only after a specified number of failed login attempts |
 | **Admin Console Integration**       | Configure Friendly Captcha directly from Keycloak's Realm Settings  |
 | **Multi-Region Support**            | Support for both Global and EU API endpoints                        |
+| **Custom Script URL**               | Configure custom JavaScript CDN URL for Friendly Captcha SDK        |
 
 ### 🚧 Roadmap
 
 | Feature                      | Status  |
 | ---------------------------- | ------- |
 | Registration Form Protection | Planned |
-| Reset Password Protection    | Planned |
 
 ## Compatibility
 
@@ -102,40 +112,7 @@ This extension has been tested with the following Keycloak versions:
 - Maven 3.6+
 - A [Friendly Captcha](https://friendlycaptcha.com/) account with Site Key and API Key
 
-### Build & Deploy
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/yourusername/keycloak-friendly-captcha.git
-   cd keycloak-friendly-captcha
-   ```
-
-2. **Build the extension:**
-
-   ```bash
-   mvn clean package
-   ```
-
-3. **Deploy the JAR:**
-
-   Copy the generated JAR file to your Keycloak `providers/` directory:
-
-   ```bash
-   cp target/keycloak-friendly-captcha-0.0-SNAPSHOT.jar /path/to/keycloak/providers/
-   ```
-
-4. **Rebuild Keycloak:**
-
-   ```bash
-   bin/kc.sh build
-   ```
-
-5. **Start Keycloak with the declarative-ui feature:**
-
-   ```bash
-   bin/kc.sh start --features=declarative-ui
-   ```
+> **Note:** For build and deployment instructions, see the [Building and Deployment](#building-and-deployment) section below.
 
 ## Configuration
 
@@ -155,10 +132,13 @@ Navigate to **Realm Settings → Friendly Captcha** tab in the Keycloak Admin Co
 | **Site Key**     | Your Friendly Captcha site key from the [Friendly Captcha Console](https://friendlycaptcha.com/dashboard) |
 | **API Key**      | Your Friendly Captcha API secret key                                                                      |
 | **API Endpoint** | Select `GLOBAL` or `EU` based on your data residency requirements                                         |
+| **Script URL**   | JavaScript CDN URL for the Friendly Captcha SDK (defaults to official CDN if not provided)                |
 
 ---
 
 ### Step 2: Configure Authentication Flow
+
+#### For Login Form
 
 1. Navigate to **Authentication → Flows**
 2. Create a copy of the **Browser** flow (or use an existing custom flow)
@@ -169,6 +149,19 @@ Navigate to **Realm Settings → Friendly Captcha** tab in the Keycloak Admin Co
 | ---------------- | ------------------------------------------------ | ---------- |
 | **Enable**       | Enable or disable Friendly Captcha for this flow | `Disabled` |
 | **Max Attempts** | Number of failed attempts before showing CAPTCHA | `3`        |
+
+#### For Reset Password Form
+
+1. Navigate to **Authentication → Flows**
+2. Create a copy of the **Reset Credentials** flow (or use an existing custom flow)
+3. Replace the default **Choose User** authenticator with **Reset Password with Friendly Captcha**
+4. Click the ⚙️ gear icon to configure the authenticator:
+
+| Setting    | Description                                      | Default    |
+| ---------- | ------------------------------------------------ | ---------- |
+| **Enable** | Enable or disable Friendly Captcha for this flow | `Disabled` |
+
+> **Note:** For the reset password flow, the CAPTCHA is shown immediately when enabled (no attempt threshold). This provides protection against automated password reset attacks.
 
 ---
 
@@ -187,8 +180,6 @@ The **Max Attempts** setting controls when the CAPTCHA widget is displayed:
 
 The attempt counter is reset upon successful authentication.
 
----
-
 ## Error Messages
 
 The extension provides user-friendly error messages when Friendly Captcha verification fails. These messages are defined in `messages_en.properties` and are displayed on the login form when verification issues occur.
@@ -206,10 +197,6 @@ The extension provides user-friendly error messages when Friendly Captcha verifi
 
 ## Theme Integration
 
-This extension includes a pre-configured `friendly-captcha` theme that you can use directly. However, you can also integrate Friendly Captcha into any custom Keycloak theme.
-
-### Using the Included Theme
-
 The extension provides a ready-to-use theme named `friendly-captcha` that includes the Friendly Captcha widget. To use it:
 
 1. Navigate to **Realm Settings → Themes**
@@ -218,7 +205,7 @@ The extension provides a ready-to-use theme named `friendly-captcha` that includ
 
 ### Integrating with Custom Themes
 
-To integrate Friendly Captcha into your own custom theme, add the following snippet to your login form template (typically `login.ftl`):
+To integrate Friendly Captcha into your own custom theme, add the following snippet to your login form template (typically `login.ftl`) or reset password form template (`login-reset-password.ftl`):
 
 ```ftl
 <#if friendly_captcha_enabled?? && friendly_captcha_enabled == "enabled">
@@ -230,7 +217,6 @@ To integrate Friendly Captcha into your own custom theme, add the following snip
                  lang="${lang}">
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@0.1.36/site.compat.min.js"></script>
     </div>
 </#if>
 ```
@@ -242,23 +228,56 @@ To integrate Friendly Captcha into your own custom theme, add the following snip
 - `friendly_captcha_endpoint` - The API endpoint (GLOBAL or EU)
 - `lang` - The current language code
 
+> **Note:** The Friendly Captcha JavaScript SDK is automatically loaded via the script URL configured in Realm Settings. The script is injected by the authenticator, so you don't need to manually include the `<script>` tag in your templates. If you need to use a custom CDN URL, configure it in **Realm Settings → Friendly Captcha → Script URL**.
+
 The snippet will automatically display the Friendly Captcha widget when enabled based on your authentication flow configuration.
 
 ---
 
-## Building from Source
+## Building and Deployment
+
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/keycloak-friendly-captcha.git
+git clone https://github.com/touqeershafi/keycloak-friendly-captcha.git
 cd keycloak-friendly-captcha
-
-# Build with Maven
-mvn clean package
-
-# The JAR will be created at:
-# target/keycloak-friendly-captcha-0.0-SNAPSHOT.jar
 ```
+
+### Step 2: Build the Extension
+
+Build the extension using Maven:
+
+```bash
+mvn clean package
+```
+
+The JAR file will be created at:
+
+```
+target/keycloak-friendly-captcha-0.0-SNAPSHOT.jar
+```
+
+### Step 3: Deploy to Keycloak
+
+1. **Copy the JAR to Keycloak providers directory:**
+
+   ```bash
+   cp target/keycloak-friendly-captcha-0.0-SNAPSHOT.jar /path/to/keycloak/providers/
+   ```
+
+2. **Rebuild Keycloak:**
+
+   ```bash
+   bin/kc.sh build
+   ```
+
+3. **Start Keycloak with the declarative-ui feature:**
+
+   ```bash
+   bin/kc.sh start --features=declarative-ui
+   ```
+
+> **Note:** Make sure to replace `/path/to/keycloak/` with your actual Keycloak installation path.
 
 ## Dependencies
 
@@ -270,6 +289,10 @@ mvn clean package
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and version history.
 
 ## License
 

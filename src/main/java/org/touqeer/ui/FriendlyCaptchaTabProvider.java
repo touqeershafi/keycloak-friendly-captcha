@@ -3,16 +3,13 @@ package org.touqeer.ui;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.component.ComponentModel;
-import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-import org.keycloak.models.RealmModel;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.keycloak.services.ui.extend.UiTabProvider;
 import org.keycloak.services.ui.extend.UiTabProviderFactory;
 import org.touqeer.config.FriendlyCaptchaConfig;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,12 +45,19 @@ public class FriendlyCaptchaTabProvider implements UiTabProvider, UiTabProviderF
 
         builder.property()
                 .name(FriendlyCaptchaConfig.SITE_VALIDATION_ENDPOINT)
-                .label("Api Endpoint")
+                .label("Endpoint")
                 .helpText("Validation endpoint")
                 .type(ProviderConfigProperty.LIST_TYPE)
                 .options(List.of("GLOBAL", "EU"))
-                .add()
-        ;
+                .add();
+
+        builder.property()
+                .name(FriendlyCaptchaConfig.FRIENDLY_CAPTCHA_SCRIPT)
+                .label("Script URL")
+                .helpText("Javascript SDK Url, you can use CDN link")
+                .defaultValue(FriendlyCaptchaConfig.FRIENDLY_CAPTCHA_DEFAULT_SCRIPT_URL)
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .add();
 
         return builder.build();
     }

@@ -77,7 +77,6 @@
                             <div id="kc-form-captcha">
                                 <div class="frc-captcha" data-sitekey="${friendly_captcha_site_key}" data-api-endpoint="${friendly_captcha_endpoint}" lang="${lang}"></div>
                             </div>
-                            <script src="https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@0.1.36/site.compat.min.js"></script>
                        </div>
                       </#if>
 
