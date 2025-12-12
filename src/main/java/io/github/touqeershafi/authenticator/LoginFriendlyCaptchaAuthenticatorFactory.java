@@ -1,4 +1,5 @@
-package org.touqeer.authenticator;
+package io.github.touqeershafi.authenticator;
+
 
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;
@@ -6,18 +7,20 @@ import org.keycloak.authentication.AuthenticatorFactory;
 import org.keycloak.models.AuthenticationExecutionModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.provider.ProviderConfigProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResetPasswordFriendlyCaptchaAuthenticatorFactory implements AuthenticatorFactory {
+public class LoginFriendlyCaptchaAuthenticatorFactory implements AuthenticatorFactory {
 
-    private static final String PROVIDER_ID = "friendly-captcha-reset-password";
+    private final static String PROVIDER_ID = "friendly-captcha-login";
 
     private final static List<ProviderConfigProperty> CONFIG_PROPERTIES = new ArrayList<>();
 
     static {
+
         ProviderConfigProperty property;
         property = new ProviderConfigProperty();
         property.setDefaultValue("Disabled");
@@ -27,16 +30,23 @@ public class ResetPasswordFriendlyCaptchaAuthenticatorFactory implements Authent
         property.setOptions(List.of("Enabled", "Disabled"));
         property.setHelpText("Enable friendly captcha on login form");
         CONFIG_PROPERTIES.add(property);
+
+        property = new ProviderConfigProperty();
+        property.setDefaultValue(3);
+        property.setName(LoginFriendlyCaptchaAuthenticator.MAX_ATTEMPTS_BEFORE_CAPTCHA);
+        property.setLabel("Max Attempts");
+        property.setHelpText("Enable friendly captcha on login form, Zero Means always show");
+        CONFIG_PROPERTIES.add(property);
     }
 
     @Override
     public String getDisplayType() {
-        return "Friendly Captcha User Chooser";
+        return "Username and Password form with Friendly Captcha";
     }
 
     @Override
     public String getReferenceCategory() {
-        return "";
+        return PasswordCredentialModel.TYPE;
     }
 
     @Override
@@ -58,7 +68,7 @@ public class ResetPasswordFriendlyCaptchaAuthenticatorFactory implements Authent
 
     @Override
     public String getHelpText() {
-        return "Choose a user to reset credentials for, with friendly captcha";
+        return "Authenticate user and verify captcha challenge";
     }
 
     @Override
@@ -67,17 +77,17 @@ public class ResetPasswordFriendlyCaptchaAuthenticatorFactory implements Authent
     }
 
     @Override
-    public Authenticator create(KeycloakSession session) {
-        return new ResetPasswordFriendlyCaptchaAuthenticator();
+    public Authenticator create(KeycloakSession keycloakSession) {
+        return new LoginFriendlyCaptchaAuthenticator();
     }
 
     @Override
-    public void init(Config.Scope config) {
+    public void init(Config.Scope scope) {
 
     }
 
     @Override
-    public void postInit(KeycloakSessionFactory factory) {
+    public void postInit(KeycloakSessionFactory keycloakSessionFactory) {
 
     }
 

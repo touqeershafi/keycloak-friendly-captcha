@@ -28,7 +28,7 @@
 
 This extension integrates [Friendly Captcha](https://friendlycaptcha.com/) into Keycloak, providing a privacy-respecting, GDPR-compliant CAPTCHA solution for your authentication flows. Unlike traditional CAPTCHAs, Friendly Captcha uses proof-of-work puzzles that are solved automatically by the user's browser, eliminating the need for image recognition challenges.
 
-The extension supports both **login** and **reset password** flows, with configurable attempt thresholds for login and immediate protection for password resets. You can configure custom JavaScript CDN URLs for the Friendly Captcha SDK through the admin console, giving you flexibility in how the CAPTCHA script is loaded.
+The extension supports **login**, **registration**, and **reset password** flows, with configurable attempt thresholds for login and immediate protection for registration and password resets. You can configure custom JavaScript CDN URLs for the Friendly Captcha SDK through the admin console, giving you flexibility in how the CAPTCHA script is loaded.
 
 ## Screenshots
 
@@ -65,6 +65,18 @@ The password reset form displaying the Friendly Captcha widget:
 
 ![Reset Password Form with Captcha](docs/screenshots/friendly-captcha-reset-password-form.png)
 
+### Registration Authentication Flow Setup
+
+Configure the Friendly Captcha action in the Registration flow:
+
+![Registration Authentication Flow](docs/screenshots/friendly-captcha-registration-authentication-flow.png)
+
+### Registration Form with Friendly Captcha
+
+The registration form displaying the Friendly Captcha widget:
+
+![Registration Form with Captcha](docs/screenshots/friendly-captcha-registration-form.png)
+
 ### Friendly Captcha Theme
 
 The included `friendly-captcha` theme with the CAPTCHA widget integrated:
@@ -80,26 +92,21 @@ The included `friendly-captcha` theme with the CAPTCHA widget integrated:
 | Feature                             | Description                                                         |
 | ----------------------------------- | ------------------------------------------------------------------- |
 | **Login Form Protection**           | Username and Password form with integrated Friendly Captcha widget  |
+| **Registration Form Protection**    | User registration form with integrated Friendly Captcha widget      |
 | **Reset Password Protection**       | Password reset form with integrated Friendly Captcha widget         |
 | **Configurable Attempts Threshold** | Show CAPTCHA only after a specified number of failed login attempts |
 | **Admin Console Integration**       | Configure Friendly Captcha directly from Keycloak's Realm Settings  |
 | **Multi-Region Support**            | Support for both Global and EU API endpoints                        |
 | **Custom Script URL**               | Configure custom JavaScript CDN URL for Friendly Captcha SDK        |
 
-### 🚧 Roadmap
-
-| Feature                      | Status  |
-| ---------------------------- | ------- |
-| Registration Form Protection | Planned |
-
 ## Compatibility
 
 This extension has been tested with the following Keycloak versions:
 
-| Keycloak Version | Status     | Notes               |
-| ---------------- | ---------- | ------------------- |
-| 26.4.x           | ✅ Tested  | Fully compatible    |
-| 26.3.x           | 🔄 Pending | Testing in progress |
+| Keycloak Version | Status          | Notes                |
+| ---------------- |-----------------|----------------------|
+| 26.4.x           | ✅ Tested       | Fully compatible     |
+| 26.3.x           | ✅ Tested       | Fully compatible     |
 
 > **Note:** This extension requires Java 17 or higher and uses the `declarative-ui` feature flag.
 
@@ -163,6 +170,19 @@ Navigate to **Realm Settings → Friendly Captcha** tab in the Keycloak Admin Co
 
 > **Note:** For the reset password flow, the CAPTCHA is shown immediately when enabled (no attempt threshold). This provides protection against automated password reset attacks.
 
+#### For Registration Form
+
+1. Navigate to **Authentication → Flows**
+2. Create a copy of the **Registration** flow (or use an existing custom flow)
+3. Add the **Friendly Captcha Registration Form** action to the flow
+4. Click the ⚙️ gear icon to configure the action:
+
+| Setting    | Description                                      | Default    |
+| ---------- | ------------------------------------------------ | ---------- |
+| **Enable** | Enable or disable Friendly Captcha for this flow | `Disabled` |
+
+> **Note:** For the registration flow, the CAPTCHA is shown immediately when enabled (no attempt threshold). This provides protection against automated registration attacks.
+
 ---
 
 ### Max Attempts Behavior
@@ -205,7 +225,7 @@ The extension provides a ready-to-use theme named `friendly-captcha` that includ
 
 ### Integrating with Custom Themes
 
-To integrate Friendly Captcha into your own custom theme, add the following snippet to your login form template (typically `login.ftl`) or reset password form template (`login-reset-password.ftl`):
+To integrate Friendly Captcha into your own custom theme, add the following snippet to your login form template (typically `login.ftl`), registration form template (`register.ftl`), or reset password form template (`login-reset-password.ftl`):
 
 ```ftl
 <#if friendly_captcha_enabled?? && friendly_captcha_enabled == "enabled">

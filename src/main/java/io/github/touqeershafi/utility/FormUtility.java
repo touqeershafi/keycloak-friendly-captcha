@@ -1,7 +1,7 @@
-package org.touqeer.form;
+package io.github.touqeershafi.utility;
 
 import org.keycloak.forms.login.LoginFormsProvider;
-import org.touqeer.config.FriendlyCaptchaConfig;
+import io.github.touqeershafi.config.FriendlyCaptchaConfig;
 
 public class FormUtility {
 

@@ -1,4 +1,4 @@
-package org.touqeer.ui;
+package io.github.touqeershafi.ui;
 
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
@@ -8,7 +8,7 @@ import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.keycloak.services.ui.extend.UiTabProvider;
 import org.keycloak.services.ui.extend.UiTabProviderFactory;
-import org.touqeer.config.FriendlyCaptchaConfig;
+import io.github.touqeershafi.config.FriendlyCaptchaConfig;
 
 import java.util.HashMap;
 import java.util.List;

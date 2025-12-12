@@ -1,11 +1,10 @@
-package org.touqeer.service;
+package io.github.touqeershafi.service;
 
 import com.friendlycaptcha.jvm.sdk.FriendlyCaptchaClient;
 import com.friendlycaptcha.jvm.sdk.VerifyResult;
 import org.jboss.logging.Logger;
-import org.keycloak.models.KeycloakSession;
-import org.touqeer.captcha.CaptchaStatus;
-import org.touqeer.config.FriendlyCaptchaConfig;
+import io.github.touqeershafi.captcha.CaptchaStatus;
+import io.github.touqeershafi.config.FriendlyCaptchaConfig;
 
 public class FriendlyCaptchaService {
 

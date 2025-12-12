@@ -1,11 +1,11 @@
-package org.touqeer.config;
+package io.github.touqeershafi.config;
 
 
 import com.friendlycaptcha.jvm.sdk.FriendlyCaptchaClientOptions;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.RealmModel;
-import org.touqeer.ui.FriendlyCaptchaTabProvider;
+import io.github.touqeershafi.ui.FriendlyCaptchaTabProvider;
 
 import java.util.Optional;
 

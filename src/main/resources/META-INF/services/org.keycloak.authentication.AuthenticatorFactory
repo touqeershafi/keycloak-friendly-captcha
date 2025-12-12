@@ -1,2 +1,2 @@
-org.touqeer.authenticator.LoginFriendlyCaptchaAuthenticatorFactory
-org.touqeer.authenticator.ResetPasswordFriendlyCaptchaAuthenticatorFactory
+io.github.touqeershafi.authenticator.LoginFriendlyCaptchaAuthenticatorFactory
+io.github.touqeershafi.authenticator.ResetPasswordFriendlyCaptchaAuthenticatorFactory

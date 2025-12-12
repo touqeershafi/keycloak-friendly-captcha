@@ -23,7 +23,7 @@
                             <div class="frc-captcha" data-sitekey="${friendly_captcha_site_key}" data-api-endpoint="${friendly_captcha_endpoint}" lang="${lang}"></div>
                         </div>
                     </div>
-              </#if>
+                </#if>
             </div>
             <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
                 <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">

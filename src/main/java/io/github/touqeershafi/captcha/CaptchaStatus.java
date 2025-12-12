@@ -1,4 +1,4 @@
-package org.touqeer.captcha;
+package io.github.touqeershafi.captcha;
 
 public enum CaptchaStatus {
 

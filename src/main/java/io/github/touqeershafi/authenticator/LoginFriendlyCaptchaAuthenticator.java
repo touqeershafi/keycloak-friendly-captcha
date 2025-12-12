@@ -1,4 +1,4 @@
-package org.touqeer.authenticator;
+package io.github.touqeershafi.authenticator;
 
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.Authenticator;
@@ -6,15 +6,15 @@ import org.keycloak.authentication.authenticators.browser.UsernamePasswordForm;
 import org.keycloak.models.AuthenticatorConfigModel;
 import org.jboss.logging.Logger;
 import org.keycloak.models.utils.FormMessage;
-import org.touqeer.captcha.CaptchaStatus;
-import org.touqeer.config.FriendlyCaptchaConfig;
-import org.touqeer.form.FormUtility;
-import org.touqeer.service.FriendlyCaptchaService;
+import io.github.touqeershafi.captcha.CaptchaStatus;
+import io.github.touqeershafi.config.FriendlyCaptchaConfig;
+import io.github.touqeershafi.utility.FormUtility;
+import io.github.touqeershafi.service.FriendlyCaptchaService;
 
 import java.util.Map;
 
-import static org.touqeer.form.FormUtility.AUTH_NOTE_ATTEMPT_COUNT;
-import static org.touqeer.form.FormUtility.enableCaptcha;
+import static io.github.touqeershafi.utility.FormUtility.AUTH_NOTE_ATTEMPT_COUNT;
+import static io.github.touqeershafi.utility.FormUtility.enableCaptcha;
 
 public class LoginFriendlyCaptchaAuthenticator extends UsernamePasswordForm implements Authenticator {
 

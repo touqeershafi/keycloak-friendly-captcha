@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Registration Form Protection: Added Friendly Captcha support for user registration flows
+  - New `RegistrationFormCaptchaAction` for protecting user registration requests
+  - Updated `register.ftl` template with CAPTCHA integration
+  - Immediate CAPTCHA display when enabled (no attempt threshold)
+  - Configurable via Authentication Flow → Registration flow → Friendly Captcha Registration Form action
+
 ## [0.0] - Reset Password and Realm Settings Improvement
 
 - Reset Password Form Protection: Added Friendly Captcha support for password reset flows
