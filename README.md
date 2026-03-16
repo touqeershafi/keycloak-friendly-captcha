@@ -104,7 +104,8 @@ The included `friendly-captcha` theme with the CAPTCHA widget integrated:
 This extension has been tested with the following Keycloak versions:
 
 | Keycloak Version | Status          | Notes                |
-| ---------------- |-----------------|----------------------|
+|------------------|-----------------|----------------------|
+| 26.5.x           | ✅ Tested       | Fully compatible     |
 | 26.4.x           | ✅ Tested       | Fully compatible     |
 | 26.3.x           | ✅ Tested       | Fully compatible     |
 
