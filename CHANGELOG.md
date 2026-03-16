@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.0] 
+- Updated pom.xml to support latest dependencies from keycloak as well as updated friendly captcha sdk
+
+## [0.0]
 
 - Registration Form Protection: Added Friendly Captcha support for user registration flows
   - New `RegistrationFormCaptchaAction` for protecting user registration requests
