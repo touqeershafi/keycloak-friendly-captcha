@@ -124,10 +124,14 @@ This extension has been tested with the following Keycloak versions:
 
 ## Configuration
 
-Configuration is done in two places:
+Configuration is done in four places:
 
 1. **Realm Settings** – Global Friendly Captcha credentials (Site Key, API Key, Region)
-2. **Authentication Flow** – Per-flow settings (Enable/Disable, Max Attempts)
+2. **Realm Settings** – Login theme (`friendly-captcha`)
+3. **Realm Settings** – CSP headers (Security Defenses)
+4. **Authentication Flow** – Per-flow settings (Enable/Disable, Max Attempts)
+
+> **Important:** If the login theme is not set to `friendly-captcha` (or your custom theme does not include the widget markup), and if CSP does not allow Friendly Captcha domains, the CAPTCHA widget will not load.
 
 ---
 
@@ -144,7 +148,50 @@ Navigate to **Realm Settings → Friendly Captcha** tab in the Keycloak Admin Co
 
 ---
 
-### Step 2: Configure Authentication Flow
+### Step 2: Set the Login Theme
+
+The extension ships a ready-to-use theme named `friendly-captcha` that includes the CAPTCHA widget markup. You must select this theme (or a custom theme that includes the widget) for the CAPTCHA to appear on login, registration, and reset password forms.
+
+1. Navigate to **Realm Settings → Themes**
+2. Set the **Login theme** to `friendly-captcha`
+3. Save the settings
+
+![Friendly Captcha Theme](docs/screenshots/friendly-captcha-login-theme.png)
+
+> **Note:** To use your own custom theme instead, see [Integrating with Custom Themes](#integrating-with-custom-themes).
+
+---
+
+### Step 3: Configure Content Security Policy (CSP)
+
+Friendly Captcha loads an iframe from `*.frcapi.com` and the SDK script from the configured Script URL. Keycloak’s default CSP is restrictive and will block the widget unless you allow these domains.
+
+Navigate to **Realm Settings → Security Defenses** and update the **Content-Security-Policy** header.
+
+**Minimum requirement** (per [Friendly Captcha CSP docs](https://developer.friendlycaptcha.com/docs/v2/guides/csp)):
+
+| Directive   | Value to allow         |
+| ----------- | ---------------------- |
+| `frame-src` | `https://*.frcapi.com` |
+
+**Example** — extend Keycloak’s default CSP:
+
+```
+frame-src 'self' https://*.frcapi.com; frame-ancestors 'self'; object-src 'none';
+```
+
+**If using a stricter custom CSP** (for example with explicit `script-src` or `connect-src`), also allow:
+
+| Directive     | Value to allow             | When needed                                                                 |
+| ------------- | -------------------------- | --------------------------------------------------------------------------- |
+| `script-src`  | `https://cdn.jsdelivr.net` | Default Script URL (or your custom CDN origin if Script URL is overridden) |
+| `connect-src` | `https://*.frcapi.com`     | If the browser blocks API calls to Friendly Captcha endpoints               |
+
+> **Note:** If you configure a custom **Script URL** in Realm Settings, add that origin to `script-src` instead of (or in addition to) `cdn.jsdelivr.net`.
+
+---
+
+### Step 4: Configure Authentication Flow
 
 #### For Login Form
 
@@ -218,11 +265,7 @@ The extension provides user-friendly error messages when Friendly Captcha verifi
 
 ## Theme Integration
 
-The extension provides a ready-to-use theme named `friendly-captcha` that includes the Friendly Captcha widget. To use it:
-
-1. Navigate to **Realm Settings → Themes**
-2. Set the **Login theme** to `friendly-captcha`
-3. Save the settings
+For the built-in theme, see [Step 2: Set the Login Theme](#step-2-set-the-login-theme) in Configuration.
 
 ### Integrating with Custom Themes
 
